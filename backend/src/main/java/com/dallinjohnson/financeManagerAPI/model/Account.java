@@ -1,5 +1,6 @@
 package com.dallinjohnson.financeManagerAPI.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -16,4 +17,9 @@ public class Account {
     @NotBlank(message = "Account name is required")
     @Size(max = 100, message = "Account name cannot exceed 100 characters")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 }

@@ -2,10 +2,12 @@ package com.dallinjohnson.financeManagerAPI.controller;
 
 import com.dallinjohnson.financeManagerAPI.dto.TransactionDTO;
 import com.dallinjohnson.financeManagerAPI.model.Transaction;
+import com.dallinjohnson.financeManagerAPI.model.User;
 import com.dallinjohnson.financeManagerAPI.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,31 +22,36 @@ public class TransactionController {
     }
 
     @GetMapping
-    public List<Transaction> getAllTransactions() {
-        return transactionService.findAll();
+    public List<Transaction> getAllTransactions(@AuthenticationPrincipal User user) {
+        return transactionService.findAll(user);
     }
 
     @GetMapping("/{transactionId}")
-    public ResponseEntity<Transaction> getTransactionById(@PathVariable Long transactionId) {
-        Transaction transaction = transactionService.findById(transactionId);
+    public ResponseEntity<Transaction> getTransactionById(@PathVariable Long transactionId, @AuthenticationPrincipal User user) {
+        Transaction transaction = transactionService.findById(transactionId, user);
         return ResponseEntity.ok(transaction);
     }
 
     @PostMapping
-    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody TransactionDTO transactionDTO) {
-        Transaction transaction = transactionService.create(transactionDTO);
+    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody TransactionDTO transactionDTO,
+                                                         @AuthenticationPrincipal User user
+    ) {
+        Transaction transaction = transactionService.create(transactionDTO, user);
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
 
     @PutMapping("/{transactionId}")
-    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long transactionId, @Valid @RequestBody TransactionDTO transactionDTO) {
-        Transaction transaction = transactionService.update(transactionId, transactionDTO);
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long transactionId,
+                                                         @Valid @RequestBody TransactionDTO transactionDTO,
+                                                         @AuthenticationPrincipal User user
+    ) {
+        Transaction transaction = transactionService.update(transactionId, transactionDTO, user);
         return ResponseEntity.ok(transaction);
     }
 
     @DeleteMapping("/{transactionId}")
-    public ResponseEntity<Void> deleteTransactionById(@PathVariable Long transactionId) {
-        transactionService.deleteById(transactionId);
+    public ResponseEntity<Void> deleteTransactionById(@PathVariable Long transactionId, @AuthenticationPrincipal User user) {
+        transactionService.deleteById(transactionId, user);
         return ResponseEntity.noContent().build();
     }
 }

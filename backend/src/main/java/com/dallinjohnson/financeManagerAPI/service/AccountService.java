@@ -2,6 +2,7 @@ package com.dallinjohnson.financeManagerAPI.service;
 
 import com.dallinjohnson.financeManagerAPI.dto.AccountDTO;
 import com.dallinjohnson.financeManagerAPI.model.Account;
+import com.dallinjohnson.financeManagerAPI.model.User;
 import com.dallinjohnson.financeManagerAPI.repository.AccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -18,31 +19,32 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public List<Account> findAll() {
-        return accountRepository.findAll();
+    public List<Account> findAll(User user) {
+        return accountRepository.findAllByUser(user);
     }
 
-    public Account findById(Long id) {
-        return accountRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Account not found with ID: " + id));
+    public Account findById(Long id, User user) {
+        return accountRepository.findByIdAndUser(id, user).orElseThrow(() -> new EntityNotFoundException("Account not found with ID: " + id));
     }
 
     @Transactional
-    public Account create(AccountDTO accountDTO) {
+    public Account create(AccountDTO accountDTO, User user) {
         Account account = new Account();
         account.setName(accountDTO.name());
+        account.setUser(user);
         return accountRepository.save(account);
     }
 
     @Transactional
-    public Account update(Long id, AccountDTO accountDTO) {
-        Account account = this.findById(id);
+    public Account update(Long id, AccountDTO accountDTO, User user) {
+        Account account = this.findById(id, user);
         account.setName(accountDTO.name());
         return accountRepository.save(account);
     }
 
     @Transactional
-    public void deleteById(Long id) {
-        Account account = this.findById(id);
+    public void deleteById(Long id, User user) {
+        Account account = this.findById(id, user);
         accountRepository.delete(account);
     }
 }
