@@ -1,35 +1,54 @@
 package com.dallinjohnson.financeManagerAPI.exception;
 
+import com.dallinjohnson.financeManagerAPI.dto.ApiError;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage()));
-        return errors;
+    public ResponseEntity<ApiError> handleValidationException(MethodArgumentNotValidException exception, WebRequest request) {
+        List<ApiError.ErrorItem> errorItems = exception.getBindingResult().getFieldErrors().stream()
+                .map(error -> new ApiError.ErrorItem(error.getField(), error.getDefaultMessage()))
+                .toList();
+
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid Request Body",
+                "Request body contains invalid data",
+                request.getDescription(false).replace("uri=", ""),
+                errorItems
+        );
+
+        return ResponseEntity.badRequest().body(apiError);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleConstraintViolationException(ConstraintViolationException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getConstraintViolations().forEach(violation ->
-                errors.put(violation.getPropertyPath().toString(), violation.getMessage()));
-        return errors;
+    public ResponseEntity<ApiError> handleConstraintViolationException(ConstraintViolationException exception, WebRequest request) {
+        List<ApiError.ErrorItem> errorItems = exception.getConstraintViolations().stream()
+                .map(violation -> new ApiError.ErrorItem(violation.getPropertyPath().toString(), violation.getMessage()))
+                .toList();
+
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation Error",
+                "Request contains invalid parameters",
+                request.getDescription(false).replace("uri=", ""),
+                errorItems
+        );
+
+        return ResponseEntity.badRequest().body(apiError);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
