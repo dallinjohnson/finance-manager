@@ -1,9 +1,7 @@
 package com.dallinjohnson.financeManagerAPI.dto;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,7 +21,9 @@ public record TransactionDTO(
         @Size(max = 255, message = "Transaction description cannot exceed 255 characters")
         String description,
 
+        @Min(value = 0, message = "Category ID must be a non-negative number")
         Long categoryId,
 
+        @Min(value = 0, message = "Account ID must be a non-negative number")
         Long accountId
 ) { }
