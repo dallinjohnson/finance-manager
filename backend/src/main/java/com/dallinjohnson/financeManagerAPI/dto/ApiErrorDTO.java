@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class ApiError {
+public class ApiErrorDTO {
     private LocalDateTime timestamp;
     private int status;
     private String error;

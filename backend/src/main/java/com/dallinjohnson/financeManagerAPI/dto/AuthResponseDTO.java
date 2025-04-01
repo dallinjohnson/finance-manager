@@ -1,6 +1,6 @@
 package com.dallinjohnson.financeManagerAPI.dto;
 
-public record AuthenticationResponse(
+public record AuthResponseDTO(
         String token
 ) {
 }

@@ -1,8 +1,8 @@
 package com.dallinjohnson.financeManagerAPI.service;
 
-import com.dallinjohnson.financeManagerAPI.dto.AuthenticationRequest;
-import com.dallinjohnson.financeManagerAPI.dto.AuthenticationResponse;
-import com.dallinjohnson.financeManagerAPI.dto.RegisterRequest;
+import com.dallinjohnson.financeManagerAPI.dto.AuthRequestDTO;
+import com.dallinjohnson.financeManagerAPI.dto.AuthResponseDTO;
+import com.dallinjohnson.financeManagerAPI.dto.RegisterDTO;
 import com.dallinjohnson.financeManagerAPI.model.Role;
 import com.dallinjohnson.financeManagerAPI.model.User;
 import com.dallinjohnson.financeManagerAPI.repository.UserRepository;
@@ -22,7 +22,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthResponseDTO register(RegisterDTO request) {
         User user = new User();
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
@@ -30,10 +30,10 @@ public class AuthenticationService {
         repository.save(user);
 
         String jwtToken = jwtService.generateToken(user);
-        return new AuthenticationResponse(jwtToken);
+        return new AuthResponseDTO(jwtToken);
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthResponseDTO authenticate(AuthRequestDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
@@ -43,6 +43,6 @@ public class AuthenticationService {
         User user = repository.findByEmail(request.email())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         String jwtToken = jwtService.generateToken(user);
-        return new AuthenticationResponse(jwtToken);
+        return new AuthResponseDTO(jwtToken);
     }
 }

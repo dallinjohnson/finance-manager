@@ -2,7 +2,7 @@ package com.dallinjohnson.financeManagerAPI.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record AuthenticationRequest(
+public record AuthRequestDTO(
         @NotBlank
         String email,
 

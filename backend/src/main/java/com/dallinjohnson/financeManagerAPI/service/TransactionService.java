@@ -1,13 +1,16 @@
 package com.dallinjohnson.financeManagerAPI.service;
 
 import com.dallinjohnson.financeManagerAPI.dto.TransactionDTO;
+import com.dallinjohnson.financeManagerAPI.dto.TransactionFilterDTO;
 import com.dallinjohnson.financeManagerAPI.model.Account;
 import com.dallinjohnson.financeManagerAPI.model.Transaction;
 import com.dallinjohnson.financeManagerAPI.model.Category;
 import com.dallinjohnson.financeManagerAPI.model.User;
 import com.dallinjohnson.financeManagerAPI.repository.TransactionRepository;
+import com.dallinjohnson.financeManagerAPI.repository.specification.TransactionSpecifications;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +27,20 @@ public class TransactionService {
         this.categoryService = categoryService;
     }
 
-    public List<Transaction> findAll(User user) {
-        return transactionRepository.findAllByUser(user);
+    public List<Transaction> findAll(TransactionFilterDTO filter, User user) {
+        Specification<Transaction> spec = Specification
+                .where(TransactionSpecifications.forUser(user))
+                .and(TransactionSpecifications.withFilters(filter));
+        return transactionRepository.findAll(spec);
     }
 
     public Transaction findById(Long id, User user) {
         return transactionRepository.findByIdAndUser(id, user).orElseThrow(() -> new EntityNotFoundException("Transaction not found with id: " + id));
+    }
+
+    public List<Transaction> findByCategory(Long categoryId, User user) {
+        Category category = categoryService.findById(categoryId, user);
+        return transactionRepository.findByCategoryAndUser(category, user);
     }
 
     @Transactional

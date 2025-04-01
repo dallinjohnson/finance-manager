@@ -1,10 +1,12 @@
 package com.dallinjohnson.financeManagerAPI.controller;
 
 import com.dallinjohnson.financeManagerAPI.dto.TransactionDTO;
+import com.dallinjohnson.financeManagerAPI.dto.TransactionFilterDTO;
 import com.dallinjohnson.financeManagerAPI.model.Transaction;
 import com.dallinjohnson.financeManagerAPI.model.User;
 import com.dallinjohnson.financeManagerAPI.service.TransactionService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,8 +24,8 @@ public class TransactionController {
     }
 
     @GetMapping
-    public List<Transaction> getAllTransactions(@AuthenticationPrincipal User user) {
-        return transactionService.findAll(user);
+    public List<Transaction> getAllTransactions(@AuthenticationPrincipal User user, @Valid @ModelAttribute TransactionFilterDTO filter) {
+        return transactionService.findAll(filter, user);
     }
 
     @GetMapping("/{transactionId}")
