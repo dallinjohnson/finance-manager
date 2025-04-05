@@ -4,7 +4,6 @@ import com.dallinjohnson.financeManagerAPI.dto.AccountDTO;
 import com.dallinjohnson.financeManagerAPI.model.Account;
 import com.dallinjohnson.financeManagerAPI.model.User;
 import com.dallinjohnson.financeManagerAPI.service.AccountService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

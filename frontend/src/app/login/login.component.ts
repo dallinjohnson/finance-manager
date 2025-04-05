@@ -38,23 +38,15 @@ export class LoginComponent {
 
     this.loading = true;
 
-    // Call the login method from AuthService
     this.authService.login(username, password).subscribe({
       next: () => {
         this.loading = false;
-        // Redirect or perform other actions after successful login
       },
       error: (error) => {
         this.loading = false;
         this.errorMessage = 'Login failed. Please check your credentials.';
-        console.error(error); // Optional: Log the error for debugging
+        console.error(error);
       },
     });
-  }
-
-  ngOnInit(): void {
-    if (this.authService.isAuthenticated$) {
-      console.log('User is authenticated');
-    }
   }
 }
