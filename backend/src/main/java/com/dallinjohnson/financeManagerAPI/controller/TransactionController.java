@@ -23,6 +23,7 @@ public class TransactionController {
     }
 
     @GetMapping
+    @CrossOrigin(origins = "http://localhost:4200")
     public List<Transaction> getAllTransactions(@AuthenticationPrincipal User user, @Valid @ModelAttribute TransactionFilterDTO filter) {
         return transactionService.findAll(filter, user);
     }

@@ -20,13 +20,6 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    console.log('can activate ran');
-    // If route has no roles, route will activate automatically
-    const roles: Role[] = route.data['roles'];
-    if (!roles) {
-      return true;
-    }
-
     if (!this.authService.isLoggedIn()) {
       return this.router.createUrlTree(['/login']);
     }

@@ -1,16 +1,15 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { DashboardComponent } from './home/dashboard.component';
-import { Role } from './models/user';
-import { AuthGuard } from './guards/auth.guard';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { MainLayoutComponent } from './components/main-layout/main-layout.component';
-import { GuestOnlyGuard } from './guards/guest-only.guard';
+import { LoginComponent } from './features/auth/pages/login/login.component';
+import { DashboardComponent } from './features/dashboard/pages/dashboard/dashboard.component';
+import { Role } from './features/auth/models/user';
+import { AuthGuard } from './features/auth/guards/auth.guard';
+import { NotFoundComponent } from './core/pages/not-found/not-found.component';
+import { GuestOnlyGuard } from './features/auth/guards/guest-only.guard';
+import { TransactionsComponent } from './features/transactions/pages/transactions/transactions.component';
+import { MainLayoutComponent } from './core/components/main-layout/main-layout.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-  // Pages with layout
   {
     path: '',
     component: MainLayoutComponent,
@@ -23,9 +22,16 @@ export const routes: Routes = [
           roles: [Role.USER],
         },
       },
+      {
+        path: 'transactions',
+        component: TransactionsComponent,
+        canActivate: [AuthGuard],
+        data: {
+          roles: [Role.USER],
+        },
+      },
     ],
   },
-  // Full screen pages
   { path: 'login', component: LoginComponent, canActivate: [GuestOnlyGuard] },
   { path: '**', component: NotFoundComponent },
 ];
