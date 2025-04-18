@@ -98,4 +98,4 @@ build/
 .DS_Store
 
 ### Spring Boot secret application properties ###
-backend/src/main/resources/application-secrets.properties
+backend\src\main\resources\application-secrets.properties
