@@ -1,7 +1,13 @@
 <h1>Transactions</h1>
-<ul>
-  @if (transactions$ | async; as transactions) { @for (transaction of
-  transactions; track transaction.amount) {
-  <li>{{ transaction.description }}</li>
-  } }
-</ul>
+
+@defer {
+  @if (transactions$ | async; as transactions) { 
+    <ul>
+      @for (transaction of transactions; track transaction.amount) {
+        <li>{{ transaction.description }}</li>
+      } 
+    </ul>
+  }
+} @loading (minimum 0.5s) {
+  <p>Loading..</p>
+}

@@ -64,7 +64,7 @@
               "buildTarget": "financeManager:build:development"
             },
             "options": {
-              "proxyConfig": "src/proxy.conf.json"
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
