@@ -1,18 +1,11 @@
 import { Component } from '@angular/core';
-import { TransactionService } from '../../services/transaction.service';
-import { Observable } from 'rxjs';
-import { Transaction } from '../../models/transaction';
-import { AsyncPipe } from '@angular/common';
+import { TransactionListComponent } from '../../components/transaction-list/transaction-list.component';
 
 @Component({
   selector: 'app-transactions',
-  imports: [AsyncPipe],
+  imports: [TransactionListComponent],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
 })
 export class TransactionsComponent {
-  transactions$: Observable<Transaction[]>;
-  constructor(private transactionService: TransactionService) {
-    this.transactions$ = this.transactionService.getTransactions();
-  }
 }

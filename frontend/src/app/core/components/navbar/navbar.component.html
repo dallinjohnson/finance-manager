@@ -1,0 +1,16 @@
+<nav class="navbar">
+  <a routerLink="/" class="logo">Finance Manager</a>
+  
+  <!-- Hamburger menu icon -->
+  <div class="hamburger" (click)="toggleMenu()">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+
+  <!-- Navigation links -->
+  <div class="nav-links" [class.active]="isMenuOpen">
+    <a routerLink="/" class="nav-link" routerLinkActive="active-link" (click)="closeMenu()">Home</a>
+    <a routerLink="/transactions" class="nav-link" routerLinkActive="active-link" (click)="closeMenu()">Transactions</a>
+  </div>
+</nav>
