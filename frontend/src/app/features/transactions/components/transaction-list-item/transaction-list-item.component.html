@@ -1,0 +1,11 @@
+<div class="transaction-container">
+  <span class="date">{{ transaction.date | date}} </span>
+  <div class="primary-row">
+    <span>{{ transaction.title }}</span>
+    <span>{{ transaction.amount | currency }}</span>
+  </div>
+  <div class="secondary-row">
+    <span class="chip">{{ transaction.category?.name || "No Category" }}</span>
+    <span class="chip">{{ transaction.account?.name || "No Account" }}</span>
+  </div>
+</div>

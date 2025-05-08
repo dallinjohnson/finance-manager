@@ -1,0 +1,5 @@
+<div class="transaction-list">
+  @for (transaction of transactions$ | async; track transaction.id) {
+    <app-transaction-list-item [transaction]="transaction"></app-transaction-list-item>
+  }
+</div>
