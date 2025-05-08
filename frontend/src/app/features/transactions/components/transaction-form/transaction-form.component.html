@@ -1,0 +1,9 @@
+<div class="transaction-form" *ngIf="transaction">
+  <div class="transaction-form-content">
+    <h3>Edit Transaction</h3>
+    <input [(ngModel)]="transaction.title" placeholder="Name" />
+    <input [(ngModel)]="transaction.amount" type="number" placeholder="Amount" />
+    <button (click)="saveTransaction()">Save</button>
+    <button (click)="closeForm()">Close</button>
+  </div>
+</div>

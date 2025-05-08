@@ -7,7 +7,17 @@ export interface Transaction {
   date: string;        // YYYY-MM-DD
   credit: boolean;     // true if credit, false if debit
   amount: number;
-  description: string | null;
-  category: Category | null
-  account: Account | null;
+  description: string | undefined;
+  category: Category | undefined
+  account: Account | undefined;
+}
+
+export interface TransactionDTO {
+  title: string;
+  date: string;        // YYYY-MM-DD
+  credit: boolean;     // true if credit, false if debit
+  amount: number;
+  description: string | undefined;
+  categoryId: number | undefined
+  accountId: number | undefined;
 }

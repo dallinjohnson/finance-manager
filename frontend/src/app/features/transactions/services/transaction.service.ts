@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Transaction } from '../models/transaction';
+import { Transaction, TransactionDTO } from '../models/transaction';
 
 @Injectable({
   providedIn: 'root',
@@ -15,9 +15,15 @@ export class TransactionService {
     return this.http.get<Transaction[]>(this.baseUrl);
   }
 
-  // get by id
+  getTransactionById(id: number) {
+    return this.http.get<Transaction>(`${this.baseUrl}/${id}`);
+  }
 
   // udpate
+  updateTransaction(id: number, transactionDto: TransactionDTO): Observable<Transaction> {
+    const url = `${this.baseUrl}/${id}`;
+    return this.http.put<Transaction>(url, transactionDto);
+  }
 
   // create
 

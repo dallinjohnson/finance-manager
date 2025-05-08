@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Transaction } from '../../models/transaction';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 
@@ -10,8 +10,9 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 })
 export class TransactionListItemComponent {
   @Input({required: true}) transaction!: Transaction;
+  @Output() clicked = new EventEmitter<any>();
 
-  ngOnInit() {
-    console.log("Raw transaction data:", this.transaction);
+  onClick() {
+    this.clicked.emit(this.transaction);
   }
 }

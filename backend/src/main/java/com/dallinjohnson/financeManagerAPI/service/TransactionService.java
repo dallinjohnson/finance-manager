@@ -50,6 +50,7 @@ public class TransactionService {
         Account account = accountService.findById(transactionDTO.accountId(), user);
         Category category = categoryService.findById(transactionDTO.categoryId(), user);
 
+        transaction.setTitle(transactionDTO.title());
         transaction.setAccount(account);
         transaction.setCategory(category);
         transaction.setDate(transactionDTO.date());
@@ -67,6 +68,7 @@ public class TransactionService {
         Account account = accountService.findById(transactionDTO.accountId(), user);
         Category category = categoryService.findById(transactionDTO.categoryId(), user);
 
+        transaction.setTitle(transactionDTO.title());
         transaction.setAccount(account);
         transaction.setCategory(category);
         transaction.setDate(transactionDTO.date());

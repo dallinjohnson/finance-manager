@@ -1,5 +1,14 @@
 <div class="transaction-list">
   @for (transaction of transactions$ | async; track transaction.id) {
-    <app-transaction-list-item [transaction]="transaction"></app-transaction-list-item>
+    <app-transaction-list-item 
+      (clicked)="onTransactionSelected(transaction)" 
+      [transaction]="transaction"
+    ></app-transaction-list-item>
   }
 </div>
+<app-transaction-form 
+  *ngIf="selectedTransaction"
+  [transaction]="selectedTransaction"
+  (transactionUpdated)="handleTransactionUpdated()"
+  (closed)="onFormClosed()">
+</app-transaction-form>

@@ -6,6 +6,7 @@ import { AuthGuard } from './features/auth/guards/auth.guard';
 import { NotFoundComponent } from './core/pages/not-found/not-found.component';
 import { GuestOnlyGuard } from './features/auth/guards/guest-only.guard';
 import { TransactionsComponent } from './features/transactions/pages/transactions/transactions.component';
+import { TransactionFormComponent } from './features/transactions/components/transaction-form/transaction-form.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -21,7 +22,10 @@ export const routes: Routes = [
     path: 'transactions', component: TransactionsComponent, canActivate: [AuthGuard],
     data: {
       roles: [Role.USER],
-    }
+    },
+    children: [
+      { path: ':id/edit', component: TransactionFormComponent }
+    ]
   },
   { path: 'login', component: LoginComponent, canActivate: [GuestOnlyGuard] },
   { path: '**', component: NotFoundComponent },
