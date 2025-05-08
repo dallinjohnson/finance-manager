@@ -9,6 +9,10 @@ public record TransactionDTO(
         @NotNull(message = "Transaction date is required")
         LocalDate date,
 
+        @NotBlank
+        @Size(max = 50, message = "Transaction description cannot exceed 50 characters")
+        String title,
+
         boolean isCredit,
 
         @NotNull(message = "Transaction amount is required")

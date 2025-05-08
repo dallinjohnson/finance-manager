@@ -2,10 +2,7 @@ package com.dallinjohnson.financeManagerAPI.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -18,6 +15,10 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq")
     @SequenceGenerator(name = "transaction_seq", sequenceName = "transaction_seq", allocationSize = 1)
     private Long id;
+
+    @NotBlank
+    @Size(max = 50)
+    private String title;
 
     @Column(nullable = false)
     private boolean isCredit = false;
