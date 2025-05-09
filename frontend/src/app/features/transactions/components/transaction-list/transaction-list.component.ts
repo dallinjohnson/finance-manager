@@ -8,12 +8,13 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
 
 @Component({
   selector: 'app-transaction-list',
-  imports: [AsyncPipe, TransactionListItemComponent, TransactionFormComponent, NgIf],
+  imports: [TransactionListItemComponent, TransactionFormComponent, NgIf],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'
 })
 export class TransactionListComponent {
   transactions$: Observable<Transaction[]>;
+  transactions: Transaction[] = [];
 
   selectedTransaction: Transaction | undefined;
 
@@ -21,14 +22,22 @@ export class TransactionListComponent {
     private transactionService: TransactionService,
   ) {
     this.transactions$ = this.transactionService.getTransactions();
+    this.transactionService.getTransactions().subscribe(transactions => {
+      this.transactions = transactions;
+    })
   }
 
   onTransactionSelected(transaction: Transaction) {
     this.selectedTransaction = { ...transaction };
   }
 
-  handleTransactionUpdated() {
-    this.transactions$ = this.transactionService.getTransactions();
+  handleTransactionUpdated(updatedTransaction: Transaction) {
+    if (updatedTransaction && updatedTransaction.id) {
+      const index = this.transactions.findIndex(t => t.id === updatedTransaction.id);
+      if (index !== -1) {
+        this.transactions[index] = updatedTransaction;
+      }
+    }
   }
 
   onFormClosed() {

@@ -1,9 +1,81 @@
 <div class="transaction-form" *ngIf="transaction">
-  <div class="transaction-form-content">
+  <!-- <div class="transaction-form-content">
     <h3>Edit Transaction</h3>
     <input [(ngModel)]="transaction.title" placeholder="Name" />
     <input [(ngModel)]="transaction.amount" type="number" placeholder="Amount" />
     <button (click)="saveTransaction()">Save</button>
     <button (click)="closeForm()">Close</button>
+  </div> -->
+  <form [formGroup]="transactionForm">
+  <!-- Title -->
+  <div class="form-row">
+    <label>Title</label>
+    <input formControlName="title" />
+    <small *ngIf="transactionForm.get('title')?.invalid && transactionForm.get('title')?.touched">
+      Required
+    </small>
   </div>
+
+  <!-- Date -->
+  <div class="form-row">
+    <label>Date</label>
+    <input type="date" formControlName="date" />
+    <small *ngIf="transactionForm.get('date')?.invalid && transactionForm.get('date')?.touched">
+      Required
+    </small>
+  </div>
+
+  <!-- Credit / Debit Toggle -->
+  <div class="form-row">
+    <label>
+      <input type="checkbox" formControlName="isCredit" />
+      Credit?
+    </label>
+  </div>
+
+  <!-- Amount -->
+  <div class="form-row">
+    <label>Amount</label>
+    <input type="number" formControlName="amount" />
+    <small *ngIf="transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched">
+      Required
+    </small>
+  </div>
+
+  <!-- Description -->
+  <div class="form-row">
+    <label>Description</label>
+    <input formControlName="description" />
+  </div>
+
+  <!-- Category Select -->
+  <div class="form-row">
+    <label>Category</label>
+    <select formControlName="categoryId">
+      <option [ngValue]="null">— Select —</option>
+      <option *ngFor="let c of categories" [ngValue]="c.id">{{ c.name }}</option>
+    </select>
+    <small *ngIf="transactionForm.get('categoryId')?.invalid && transactionForm.get('categoryId')?.touched">
+      Required
+    </small>
+  </div>
+
+  <!-- Account Select -->
+  <div class="form-row">
+    <label>Account</label>
+    <select formControlName="accountId">
+      <option [ngValue]="null">— Select —</option>
+      <option *ngFor="let a of accounts" [ngValue]="a.id">{{ a.name }}</option>
+    </select>
+    <small *ngIf="transactionForm.get('accountId')?.invalid && transactionForm.get('accountId')?.touched">
+      Required
+    </small>
+  </div>
+
+  <!-- Actions -->
+  <div class="form-actions">
+    <button type="button" (click)="save()" [disabled]="transactionForm.invalid">Save</button>
+    <button type="button" (click)="closeForm()">Cancel</button>
+  </div>
+</form>
 </div>
