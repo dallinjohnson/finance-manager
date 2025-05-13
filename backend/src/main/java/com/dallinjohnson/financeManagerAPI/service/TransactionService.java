@@ -57,6 +57,7 @@ public class TransactionService {
         transaction.setAmount(transactionDTO.amount());
         transaction.setDescription(transactionDTO.description());
         transaction.setUser(user);
+        transaction.setCredit(transactionDTO.isCredit());
 
         return transactionRepository.save(transaction);
     }
@@ -74,6 +75,7 @@ public class TransactionService {
         transaction.setDate(transactionDTO.date());
         transaction.setAmount(transactionDTO.amount());
         transaction.setDescription(transactionDTO.description());
+        transaction.setCredit(transactionDTO.isCredit());
 
         return transactionRepository.save(transaction);
     }

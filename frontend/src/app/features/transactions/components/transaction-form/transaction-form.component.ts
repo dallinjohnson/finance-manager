@@ -5,6 +5,8 @@ import { NgForOf, NgIf } from '@angular/common';
 import { TransactionService } from '../../services/transaction.service';
 import { Category } from '../../../categories/models/category';
 import { Account } from '../../../accounts/models/account';
+import { AccountService } from '../../../accounts/services/account.service';
+import { CategoryService } from '../../../categories/services/category.service';
 
 @Component({
   selector: 'app-transaction-form',
@@ -21,27 +23,53 @@ export class TransactionFormComponent implements OnInit {
   categories: Category[] = [];
   accounts: Account[] = [];
 
-  constructor(private transactionService: TransactionService, private formBuilder: FormBuilder) { }
+  constructor(
+    private transactionService: TransactionService, 
+    private accountService: AccountService, 
+    private categoryService: CategoryService,
+    private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.transactionForm = this.formBuilder.group({
       title: [this.transaction.title, Validators.required],
       date: [this.transaction.date, Validators.required],
       amount: [this.transaction.amount, Validators.required],
-      isCredit: [this.transaction.credit, Validators.required],
+      credit: [this.toBool(this.transaction.credit), Validators.required],
       categoryId: [this.transaction.category?.id],
       accountId: [this.transaction.account?.id],
       description: [this.transaction.description]
-    })
+    });
+
+    this.accountService.getAccounts().subscribe({
+      next: accounts => this.accounts = accounts,
+      error: err => console.error('Failed to load accounts', err)
+    });
+
+    this.categoryService.getCategories().subscribe({
+      next: categories => this.categories = categories,
+      error: err => console.error('Failed to load categories', err)
+    });
   }
 
   save() {
-    const updated: Transaction = {
-      ...this.transaction,
+    const updated: TransactionDTO = {
       ...this.transactionForm.value
     };
+    this.transactionService.updateTransaction(this.transaction.id, updated).subscribe({
+      next: updatedTransaction => {
+        this.transactionUpdated.emit(updatedTransaction);
+        this.closeForm();
+      },
+      error: error => {
+        console.error('Error updating transaction:', error);
+        this.closeForm();
+      },
+      complete: () => {
+        console.log('Transaction update complete');
+      }
+    });
+
     console.log(updated);
-    // this.transactionUpdated.emit(updated);
   }
 
   closeForm() {
@@ -50,6 +78,11 @@ export class TransactionFormComponent implements OnInit {
 
   onSubmit() {
     console.log(this.transaction);
+    if (this.transactionForm.invalid) {
+      console.error('Form is invalid');
+      return;
+    }
+
     this.closed.emit();
   }
 
@@ -80,4 +113,6 @@ export class TransactionFormComponent implements OnInit {
       });
     }
   }
+
+  toBool(v: any): boolean { return v === true || v === 'true' || v === 1; }
 }

@@ -1,16 +1,9 @@
-<div class="transaction-form" *ngIf="transaction">
-  <!-- <div class="transaction-form-content">
-    <h3>Edit Transaction</h3>
-    <input [(ngModel)]="transaction.title" placeholder="Name" />
-    <input [(ngModel)]="transaction.amount" type="number" placeholder="Amount" />
-    <button (click)="saveTransaction()">Save</button>
-    <button (click)="closeForm()">Close</button>
-  </div> -->
-  <form [formGroup]="transactionForm">
+<div class="form-container" *ngIf="transaction">
+  <form [formGroup]="transactionForm" class="form">
   <!-- Title -->
   <div class="form-row">
-    <label>Title</label>
-    <input formControlName="title" />
+    <label for="title">Title</label>
+    <input id="title" formControlName="title" />
     <small *ngIf="transactionForm.get('title')?.invalid && transactionForm.get('title')?.touched">
       Required
     </small>
@@ -25,12 +18,15 @@
     </small>
   </div>
 
-  <!-- Credit / Debit Toggle -->
+  <!-- Transaction Type Select -->
   <div class="form-row">
-    <label>
-      <input type="checkbox" formControlName="isCredit" />
-      Credit?
-    </label>
+    <label for="transactionType">Transaction Type</label>
+  
+    <select id="transactionType"
+            formControlName="credit">
+      <option [ngValue]="false">Expense</option>
+      <option [ngValue]="true">Income</option>
+    </select>
   </div>
 
   <!-- Amount -->
@@ -40,12 +36,6 @@
     <small *ngIf="transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched">
       Required
     </small>
-  </div>
-
-  <!-- Description -->
-  <div class="form-row">
-    <label>Description</label>
-    <input formControlName="description" />
   </div>
 
   <!-- Category Select -->
@@ -72,10 +62,16 @@
     </small>
   </div>
 
+  <!-- Description -->
+  <div class="form-row">
+    <label>Description</label>
+    <textarea id="description" formControlName="description"></textarea>
+  </div>
+
   <!-- Actions -->
   <div class="form-actions">
-    <button type="button" (click)="save()" [disabled]="transactionForm.invalid">Save</button>
     <button type="button" (click)="closeForm()">Cancel</button>
+    <button type="button" (click)="save()" [disabled]="transactionForm.invalid">Save</button>
   </div>
 </form>
 </div>
